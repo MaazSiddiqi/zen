@@ -41,19 +41,16 @@ impl ZenConfig {
 
 struct Zen {
     config: ZenConfig,
-    has_loaded: bool,
 }
 
 impl Zen {
     fn new() -> Zen {
         Zen {
             config: ZenConfig::new(),
-            has_loaded: false,
         }
     }
     fn load(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         self.config = ZenConfig::load()?;
-        self.has_loaded = true;
         Ok(())
     }
 
@@ -62,10 +59,6 @@ impl Zen {
         alias: String,
         command: String,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        if !self.has_loaded {
-            panic!("zen has not been loaded");
-        }
-
         self.config.add_command(alias.clone(), command.clone());
         self.config.save()?;
 
@@ -73,14 +66,10 @@ impl Zen {
     }
 
     fn execute_alias(
-        self,
+        &self,
         alias: String,
         args: Vec<&str>,
     ) -> Result<bool, Box<dyn std::error::Error>> {
-        if !self.has_loaded {
-            panic!("zen has not been loaded");
-        }
-
         let command = match self.config.get_command(alias.as_str()) {
             Some(command) => {
                 if args.is_empty() {
@@ -108,11 +97,100 @@ impl Zen {
 
         Ok(true)
     }
+
+    fn discard_alias(&mut self, alias: String) -> Result<bool, Box<dyn std::error::Error>> {
+        if !self.config.commands.contains_key(&alias) {
+            return Ok(false);
+        }
+
+        self.config.commands.remove(&alias);
+        self.config.save()?;
+        Ok(true)
+    }
 }
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
+fn handle_list_command(_args: &[String]) {
+    let mut zen = Zen::new();
 
+    match zen.load() {
+        Ok(_) => {}
+        Err(err) => {
+            println!("Something went wrong while initializing zen: {}", err);
+            std::process::exit(1);
+        }
+    }
+
+    if zen.config.commands.is_empty() {
+        println!("No aliases registered.");
+        println!("");
+        println!("Register an alias with `zen add <alias> <command>`");
+        return;
+    }
+
+    println!("Available aliases:");
+    for (alias, command) in &zen.config.commands {
+        println!("  {}: {}", alias, command);
+    }
+}
+
+fn handle_add_command(args: &[String]) {
+    if args.len() < 2 {
+        println!("Usage: zen add <alias> <command>");
+        return;
+    }
+
+    let alias = &args[0];
+    let command = args[1..].join(" ");
+
+    let mut zen = Zen::new();
+    match zen.load() {
+        Ok(_) => {}
+        Err(err) => {
+            println!("Something went wrong while initializing zen: {}", err);
+            std::process::exit(1);
+        }
+    }
+
+    match zen.register_alias(alias.clone(), command.clone()) {
+        Ok(_) => {
+            println!("Successfully registered alias");
+            println!("  {}: {}", alias, command);
+        }
+        Err(err) => {
+            println!("Could not register alias: {}", err);
+            std::process::exit(1);
+        }
+    }
+}
+
+fn handle_remove_command(args: &[String]) {
+    let alias = &args[0];
+
+    let mut zen = Zen::new();
+
+    match zen.load() {
+        Ok(_) => {}
+        Err(err) => {
+            println!("Something went wrong while initializing zen: {}", err);
+            std::process::exit(1);
+        }
+    }
+
+    match zen.discard_alias(alias.clone()) {
+        Ok(existed) => {
+            if !existed {
+                println!("Alias was not found in the registry");
+            } else {
+                println!("Successfully discarded alias {}", alias);
+            }
+        }
+        Err(err) => {
+            println!("Something went wrong while discarding: {}", err)
+        }
+    }
+}
+
+fn handle_run_command(args: &[String]) {
     let mut zen = Zen::new();
 
     match zen.load() {
@@ -127,7 +205,7 @@ fn main() {
 
     match register_idx {
         Some(idx) => {
-            let alias = args[1..idx].join(" ");
+            let alias = args[..idx].join(" ");
             let command = args[idx + 1..].join(" ");
 
             match zen.register_alias(alias.clone(), command.clone()) {
@@ -142,14 +220,15 @@ fn main() {
             }
         }
         None => {
-            let alias = &args[1];
-            let alias_args: Vec<&str> = args.iter().skip(2).map(|x| x.as_str()).collect();
+            let alias = &args[0];
+            let alias_args: Vec<&str> = args.iter().skip(1).map(|x| x.as_str()).collect();
 
             match zen.execute_alias(alias.clone(), alias_args) {
                 Ok(found) => {
                     if !found {
                         println!("No command registered for alias '{}'", alias);
-                        println!("Register a command with:");
+                        println!("");
+                        println!("Register a command to this alias with:");
                         println!("  zz {} --register <command> [args]", alias);
                         return;
                     }
@@ -159,6 +238,30 @@ fn main() {
                     std::process::exit(1);
                 }
             }
+        }
+    }
+}
+
+fn print_usage() {}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 2 {
+        print_usage();
+        return;
+    }
+
+    let subcommand = &args[1];
+
+    match subcommand.as_str() {
+        "run" => handle_run_command(&args[2..]),
+        "list" => handle_list_command(&args[2..]),
+        "add" => handle_add_command(&args[2..]),
+        "remove" => handle_remove_command(&args[2..]),
+        _ => {
+            println!("Unknown command: {}", subcommand);
+            print_usage();
         }
     }
 }
