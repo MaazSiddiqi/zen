@@ -164,7 +164,10 @@ fn handle_add_command(args: &[String]) {
 }
 
 fn handle_remove_command(args: &[String]) {
-    let alias = &args[0];
+    if args.is_empty() {
+        println!("Usage: zen remove <alias>");
+        return;
+    }
 
     let mut zen = Zen::new();
 
@@ -175,6 +178,8 @@ fn handle_remove_command(args: &[String]) {
             std::process::exit(1);
         }
     }
+
+    let alias = &args[0];
 
     match zen.discard_alias(alias.clone()) {
         Ok(existed) => {
