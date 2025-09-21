@@ -123,7 +123,8 @@ fn handle_list_command(_args: &[String]) {
     if zen.config.commands.is_empty() {
         println!("No aliases registered.");
         println!("");
-        println!("Register an alias with `zen add <alias> <command>`");
+        println!("Register an alias with:");
+        println!("  zen add <alias> <command>");
         return;
     }
 
@@ -196,6 +197,10 @@ fn handle_remove_command(args: &[String]) {
 }
 
 fn handle_run_command(args: &[String]) {
+    if args.is_empty() {
+        return handle_browse_command(&[]);
+    }
+
     let mut zen = Zen::new();
 
     match zen.load() {
@@ -247,6 +252,91 @@ fn handle_run_command(args: &[String]) {
     }
 }
 
+fn check_fzf_available() -> bool {
+    Command::new("fzf")
+        .arg("--version")
+        .output()
+        .map(|output| output.status.success())
+        .unwrap_or(false)
+}
+
+fn handle_browse_command(_args: &[String]) {
+    let mut zen = Zen::new();
+
+    match zen.load() {
+        Ok(_) => {}
+        Err(err) => {
+            println!("Something went wrong while initializing zen: {}", err);
+            std::process::exit(1);
+        }
+    }
+
+    if zen.config.commands.is_empty() {
+        println!("No aliases registered.");
+        println!("");
+        println!("Register an alias with:");
+        println!("  zen add <alias> <command>");
+        return;
+    }
+
+    if !check_fzf_available() {
+        println!("fzf is not installed or not in PATH.");
+        println!("Install fzf to use the browse feature:");
+        println!("  brew install fzf                    # macOS");
+        println!("  sudo apt install fzf                # Ubuntu/Debian");
+        println!("  https://github.com/junegunn/fzf     # Other systems");
+        println!("");
+        println!("Falling back to list view:");
+        return handle_list_command(&[]);
+    }
+
+    let fzf_entries: Vec<String> = zen
+        .config
+        .commands
+        .iter()
+        .map(|(alias, command)| format!("{}\t{}", alias, command))
+        .collect();
+
+    let mut browse = match Command::new("fzf")
+        .arg("--delimiter=\t")
+        .arg("--with-nth=1")
+        .arg("--preview=echo {2}")
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+    {
+        Ok(child) => child,
+        Err(err) => {
+            println!("Something went wrong while browsing: {}", err);
+            return handle_list_command(&[]);
+        }
+    };
+
+    if let Some(stdin) = browse.stdin.take() {
+        use std::io::Write;
+        let mut stdin = stdin;
+        let input = fzf_entries.join("\n");
+        let _ = stdin.write_all(input.as_bytes());
+    }
+
+    match browse.wait_with_output() {
+        Ok(output) => {
+            if output.status.success() {
+                let selection = String::from_utf8_lossy(&output.stdout).trim().to_string();
+                if !selection.is_empty() {
+                    let alias = selection.split('\t').next().unwrap_or(selection.as_str());
+
+                    handle_run_command(&vec![alias.to_string()]);
+                }
+            }
+            // User cancelled (Ctrl+C) - just exit silently
+        }
+        Err(err) => {
+            println!("Error running fzf: {}", err);
+        }
+    }
+}
+
 fn print_usage() {}
 
 fn main() {
@@ -264,6 +354,7 @@ fn main() {
         "list" => handle_list_command(&args[2..]),
         "add" => handle_add_command(&args[2..]),
         "remove" => handle_remove_command(&args[2..]),
+        "browse" => handle_browse_command(&args[2..]),
         _ => {
             println!("Unknown command: {}", subcommand);
             print_usage();

@@ -74,6 +74,7 @@ $ ZEN_USE_INTERACTIVE=true zz <alias> --another-arg
 | `zen run <alias> [args]` | Execute a registered alias | `zen run dev --port 3000` |
 | `zen list` | Show all registered aliases | `zen list` |
 | `zen remove <alias>` | Delete an alias | `zen remove dev` |
+| `zen browse` | Interactive alias selection (requires fzf) | `zen browse` |
 
 ### Quick Usage with `zz`
 
@@ -83,6 +84,7 @@ For faster workflow, you can also use:
 |---------|------------|-------------|
 | `zz <alias> [args]` | `zen run <alias> [args]` | Quick execution |
 | `zz <alias> --register <command>` | `zen add <alias> <command>` | Register in-flow |
+| `zz` | `zen browse` | Interactive selection |
 
 ### Examples
 
