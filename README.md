@@ -60,6 +60,14 @@ Example: Run your nextjs project from earlier
 $ zz run
 ```
 
+`zen` also supports executing aliases while respecting your custom shell aliases too! Now your zen alias commands will have access to your shell aliases.
+
+```
+$ ZEN_USE_INTERACTIVE=true zz <alias> --another-arg
+```
+
+
+
 ## Why?
 
 I work on many projects simultaneously, spread widely between many different languages and frameworks. I find it very annoying to memorize the commands for each project, especially if I'm revisiting a project after a while.
