@@ -144,3 +144,11 @@ I've thought of a few things I would like to add myself:
 - A global zen command registry, storing global aliases. Local aliases override globals
 - `zz` to list currently available commands
 - running servers with zen keeps track of the server process, allowing to kill any outstanding servers you don't want from an fzf view. Tackles the `kill on port` problem
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+- Report bugs via [Issues](https://github.com/MaazSiddiqi/zen/issues)
+- Suggest features via [Issues](https://github.com/MaazSiddiqi/zen/issues)
+- Submit [Pull Requests](https://github.com/MaazSiddiqi/zen/pulls)
