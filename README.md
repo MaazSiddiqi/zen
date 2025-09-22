@@ -106,6 +106,21 @@ zz deploy --register "npm run build && aws s3 sync dist/ s3://my-bucket"
 
 ## Installation
 
+### Homebrew (Recommended)
+
+```bash
+brew tap MaazSiddiqi/tap
+brew install zen --formula
+```
+
+After installation, set up the `zz` alias for quick access:
+```bash
+echo 'alias zz="zen run"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+> **Note:** For bash users, replace `.zshrc` with `.bashrc` in the commands above.
+
 ### Manual Installation
 
 #### Prerequisites
@@ -148,12 +163,38 @@ zz deploy --register "npm run build && aws s3 sync dist/ s3://my-bucket"
    source ~/.zshrc
    ```
 
-> **Note:** For bash users, replace `.zshrc` with `.bashrc` in the commands above.
+### Optional: fzf Integration
 
-### Homebrew
+For the best experience with interactive browsing, install [fzf](https://github.com/junegunn/fzf):
+
 ```bash
-brew tap MaazSiddiqi/tap
-brew install zen
+# macOS
+brew install fzf
+
+# Ubuntu/Debian
+sudo apt install fzf
+```
+
+## Quick Start
+
+Once installed, try these commands to get started:
+
+```bash
+# Add your first alias
+zen add dev "npm run dev"
+
+# Execute it
+zz dev
+
+# Add more aliases
+zen add build "npm run build"
+zen add test "npm test"
+
+# See all your aliases
+zen list
+
+# Browse and select interactively (requires fzf)
+zz
 ```
 
 ## Why?
