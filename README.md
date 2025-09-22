@@ -60,10 +60,10 @@ For faster workflow, you can also use:
 You can also run your command in interactive mode for commands that require your custom shell configuration like global aliases.
 
 ```zsh
-$ export ZEN_ENV_USE_INTERACTIVE=true
+export ZEN_ENV_USE_INTERACTIVE=true
 
 # or run directly with your command
-$ ZEN_ENV_USE_INTERACTIVE=true zz run
+ZEN_ENV_USE_INTERACTIVE=true zz run
 
 ```
 
