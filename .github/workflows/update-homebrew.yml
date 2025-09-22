@@ -19,7 +19,7 @@ jobs:
         with:
           formula-name: zen
           homebrew-tap: MaazSiddiqi/homebrew-tap
-          base-branch: main
           download-url: https://github.com/MaazSiddiqi/zen/archive/${{ github.event.inputs.tag || github.ref_name }}.tar.gz
+          commit-message: "Update zen to ${{ github.event.inputs.tag || github.ref_name }}"
         env:
           COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
