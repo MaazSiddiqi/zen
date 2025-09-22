@@ -10,15 +10,9 @@ A simple command launcher and alias manager
 
 ## What is this?
 
-`zen` provides a quick and convenient way to register and alias project specific commands.
+`zen` lets you create project-specific command aliases. Instead of remembering `npm run dev` for React, `cargo run` for Rust, or `python manage.py runserver` for Django, just use `zz run` everywhere.
 
-This is provides a simple way to store project aliases for commands like `run` or `build` or `test` etc. You can abstract away the specifics of the command within a project.
-
-This can be used to build a unified system of commands across multiple projects to reduces the context-switching fatigue and streamline your developer workflow.
-
-This also allows new users onboarding on to your project to get off the ground faster by standardizing common aliases like `run` in your projects.
-
-This is very powerful with a utilities like [zoxide](https://github.com/ajeetdsouza/zoxide) and [tmux](https://github.com/tmux/tmux)
+Reduces context-switching fatigue and standardizes workflows across projects.
 
 ## Command Reference
 
