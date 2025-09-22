@@ -121,28 +121,6 @@ brew install fzf
 sudo apt install fzf
 ```
 
-## Quick Start
-
-Once installed, try these commands to get started:
-
-```bash
-# Add your first alias
-zen add dev "npm run dev"
-
-# Execute it
-zz dev
-
-# Add more aliases
-zen add build "npm run build"
-zen add test "npm test"
-
-# See all your aliases
-zen list
-
-# Browse and select interactively (requires fzf)
-zz
-```
-
 ## Why?
 
 I work on many projects simultaneously, spread widely between many different languages and frameworks. I find it very annoying to memorize the commands for each project, especially if I'm revisiting a project after a while.
