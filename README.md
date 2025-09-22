@@ -20,52 +20,6 @@ This also allows new users onboarding on to your project to get off the ground f
 
 This is very powerful with a utilities like [zoxide](https://github.com/ajeetdsouza/zoxide) and [tmux](https://github.com/tmux/tmux)
 
-## How to use this?
-
-`zen` works by registering and looking up commands from your projects `zen-config.toml`.
-
-### Register a command
-
-```
-$ zz <alias> --register <command> [args]
-```
-
-The command has now been registered and can be found in the local `zen-config.toml`. If one doesn't exist, it will be created.
-
-Example: alias for sample nextjs project:
-
-```
-$ zz run --register npm run dev
-```
-
-### Invoke a `zen` command
-
-```
-$ zz <alias>
-```
-
-`zen` will lookup the command in its registry, and invoke it.
-
-
-If you want to invoke and pass in more args to the aliased command, simple pass in more args as needed. All args to the alias will be forwarded to the source command
-
-```
-$ zz <alias> --another-arg
-```
-
-
-Example: Run your nextjs project from earlier 
-
-```
-$ zz run
-```
-
-`zen` also supports executing aliases while respecting your custom shell aliases too! Now your zen alias commands will have access to your shell aliases.
-
-```
-$ ZEN_USE_INTERACTIVE=true zz <alias> --another-arg
-```
-
 ## Command Reference
 
 | Command | Description | Example |
