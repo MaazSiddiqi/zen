@@ -8,8 +8,6 @@
 
 A simple command launcher and alias manager
 
-### Examples
-
 ```bash
 # Set up aliases for a React project
 zen add dev "npm run dev"
