@@ -102,4 +102,16 @@ mod tests {
         assert!(has_dev);
         assert!(has_test);
     }
+
+    #[test]
+    fn test_parameter_substitution() {
+        let mut config = ZenConfig::new();
+        config.add_command("test".to_string(), "cargo test {} --verbose".to_string());
+        config.add_command("run".to_string(), "npm run {}".to_string());
+        config.add_command("build".to_string(), "make build".to_string()); // No placeholders
+
+        assert_eq!(config.get_command("test"), Some(&"cargo test {} --verbose".to_string()));
+        assert_eq!(config.get_command("run"), Some(&"npm run {}".to_string()));
+        assert_eq!(config.get_command("build"), Some(&"make build".to_string()));
+    }
 }

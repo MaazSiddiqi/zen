@@ -10,14 +10,21 @@ zen add dev "npm run dev"
 zen add build "npm run build"
 zen add test "npm test -- --watchAll=false"
 
+# Parameter substitution with {}
+zen add deploy "aws s3 sync {} s3://my-bucket"
+zen add copy "cp {} {}"
+
 # Quick execution
 zz dev                    # Runs: npm run dev
 zz test --verbose        # Runs: npm test -- --watchAll=false --verbose
+zz deploy ./dist         # Runs: aws s3 sync ./dist s3://my-bucket
+zz copy file1.txt backup/  # Runs: cp file1.txt backup/
+
+# Interactive browsing
+zz                       # Opens fzf menu to select and run any alias
 
 # In-flow registration (when you forget to set up an alias)
-zz deploy                # Error: No command registered
-# ↑ + --register
-zz deploy --register "npm run build && aws s3 sync dist/ s3://my-bucket"
+zz build-prod --register "npm run build --production"
 ```
 
 # zen
@@ -49,6 +56,52 @@ For faster workflow, you can also use:
 | `zz <alias> [args]` | `zen run <alias> [args]` | Quick execution |
 | `zz <alias> --register <command>` | `zen add <alias> <command>` | Register in-flow |
 | `zz` | `zen browse` | Interactive selection |
+
+You can also run your command in interactive mode for commands that require your custom shell configuration like global aliases.
+
+```zsh
+$ export ZEN_ENV_USE_INTERACTIVE=true
+
+# or run directly with your command
+$ ZEN_ENV_USE_INTERACTIVE=true zz run
+
+```
+
+## Command Definitions & Parameter Substitution
+
+### Basic Commands
+Commands are stored as simple string templates:
+```bash
+zen add dev "npm run dev"
+zen add build "make clean && make build"
+```
+
+### Parameter Substitution
+Use `{}` placeholders to insert arguments anywhere in your commands:
+
+```bash
+# Single parameter
+zen add test "cargo test {} --verbose"
+zz test my_module         # Runs: cargo test my_module --verbose
+
+# Multiple parameters
+zen add copy "cp {} {}"
+zz copy file1.txt file2.txt  # Runs: cp file1.txt file2.txt
+
+# Mixed placeholders and fixed text
+zen add deploy "rsync -av {} user@server:{}"
+zz deploy ./dist /var/www  # Runs: rsync -av ./dist user@server:/var/www
+
+# Extra arguments are appended
+zen add build "make {}"
+zz build release --jobs 4  # Runs: make release --jobs 4
+```
+
+### How Parameter Substitution Works
+1. **Sequential replacement**: `{}` placeholders are replaced left-to-right with provided arguments
+2. **Extra arguments**: Any remaining arguments are appended to the end of the command
+3. **Flexible**: Works with any number of placeholders and arguments
+4. **Backward compatible**: Commands without `{}` work exactly as before
 
 ## Installation
 
