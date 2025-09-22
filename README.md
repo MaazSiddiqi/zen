@@ -8,6 +8,24 @@
 
 A simple command launcher and alias manager
 
+### Examples
+
+```bash
+# Set up aliases for a React project
+zen add dev "npm run dev"
+zen add build "npm run build"
+zen add test "npm test -- --watchAll=false"
+
+# Quick execution
+zz dev                    # Runs: npm run dev
+zz test --verbose        # Runs: npm test -- --watchAll=false --verbose
+
+# In-flow registration (when you forget to set up an alias)
+zz deploy                # Error: No command registered
+# ↑ + --register
+zz deploy --register "npm run build && aws s3 sync dist/ s3://my-bucket"
+```
+
 ## What is this?
 
 `zen` lets you create project-specific command aliases. Instead of remembering `npm run dev` for React, `cargo run` for Rust, or `python manage.py runserver` for Django, just use `zz run` everywhere.
@@ -33,24 +51,6 @@ For faster workflow, you can also use:
 | `zz <alias> [args]` | `zen run <alias> [args]` | Quick execution |
 | `zz <alias> --register <command>` | `zen add <alias> <command>` | Register in-flow |
 | `zz` | `zen browse` | Interactive selection |
-
-### Examples
-
-```bash
-# Set up aliases for a React project
-zen add dev "npm run dev"
-zen add build "npm run build"
-zen add test "npm test -- --watchAll=false"
-
-# Quick execution
-zz dev                    # Runs: npm run dev
-zz test --verbose        # Runs: npm test -- --watchAll=false --verbose
-
-# In-flow registration (when you forget to set up an alias)
-zz deploy                # Error: No command registered
-# ↑ + --register
-zz deploy --register "npm run build && aws s3 sync dist/ s3://my-bucket"
-```
 
 ## Installation
 
