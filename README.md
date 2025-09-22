@@ -104,6 +104,58 @@ zz deploy                # Error: No command registered
 zz deploy --register "npm run build && aws s3 sync dist/ s3://my-bucket"
 ```
 
+## Installation
+
+### Manual Installation
+
+#### Prerequisites
+- [Rust](https://rustup.rs/) (cargo required for building)
+- Git
+
+#### Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/MaazSiddiqi/zen.git
+   cd zen
+   ```
+
+2. **Build the project**
+   ```bash
+   cargo build --release
+   ```
+
+3. **Install the binary**
+   ```bash
+   # Copy to a directory in your PATH
+   cp target/release/zen ~/.local/bin/zen
+   # Or for system-wide installation (requires sudo)
+   sudo cp target/release/zen /usr/local/bin/zen
+   ```
+
+4. **Add to PATH** (if using ~/.local/bin)
+   ```bash
+   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+   ```
+
+5. **Set up the zz alias**
+   ```bash
+   echo 'alias zz="zen run"' >> ~/.zshrc
+   ```
+
+6. **Reload your shell**
+   ```bash
+   source ~/.zshrc
+   ```
+
+> **Note:** For bash users, replace `.zshrc` with `.bashrc` in the commands above.
+
+### Homebrew
+```bash
+brew tap MaazSiddiqi/tap
+brew install zen
+```
+
 ## Why?
 
 I work on many projects simultaneously, spread widely between many different languages and frameworks. I find it very annoying to memorize the commands for each project, especially if I'm revisiting a project after a while.
