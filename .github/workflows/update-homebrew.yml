@@ -23,3 +23,4 @@ jobs:
           commit-message: "Update zen to ${{ github.event.inputs.tag || github.ref_name }}"
         env:
           COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
