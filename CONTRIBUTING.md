@@ -59,7 +59,8 @@ cargo install --path .
 ### Code Style
 - Follow standard Rust conventions
 - Run `cargo fmt` before committing
-- Ensure `cargo clippy` passes
+- Fix clippy warnings: `cargo clippy --fix`
+- Ensure `cargo clippy` passes with no warnings
 - Keep functions small and focused
 
 ### Commit Messages

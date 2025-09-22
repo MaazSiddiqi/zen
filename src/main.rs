@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::process::Command;
 use std::{collections::HashMap, env};
-use toml;
 
 const ZEN_CONFIG_IDENTIFIER: &str = "zen-config.toml";
 const ZEN_ENV_USE_INTERACTIVE: &str = "ZEN_USE_INTERACTIVE";
@@ -18,7 +17,7 @@ impl ZenConfig {
         }
     }
     fn load() -> Result<ZenConfig, Box<dyn std::error::Error>> {
-        if !std::fs::metadata(ZEN_CONFIG_IDENTIFIER).is_ok() {
+        if std::fs::metadata(ZEN_CONFIG_IDENTIFIER).is_err() {
             return Ok(ZenConfig::new());
         }
 
@@ -122,7 +121,7 @@ fn handle_list_command(_args: &[String]) {
 
     if zen.config.commands.is_empty() {
         println!("No aliases registered.");
-        println!("");
+        println!();
         println!("Register an alias with:");
         println!("  zen add <alias> <command>");
         return;
@@ -237,10 +236,9 @@ fn handle_run_command(args: &[String]) {
                 Ok(found) => {
                     if !found {
                         println!("No command registered for alias '{}'", alias);
-                        println!("");
+                        println!();
                         println!("Register a command to this alias with:");
                         println!("  zz {} --register <command> [args]", alias);
-                        return;
                     }
                 }
                 Err(err) => {
@@ -273,7 +271,7 @@ fn handle_browse_command(_args: &[String]) {
 
     if zen.config.commands.is_empty() {
         println!("No aliases registered.");
-        println!("");
+        println!();
         println!("Register an alias with:");
         println!("  zen add <alias> <command>");
         return;
@@ -285,7 +283,7 @@ fn handle_browse_command(_args: &[String]) {
         println!("  brew install fzf                    # macOS");
         println!("  sudo apt install fzf                # Ubuntu/Debian");
         println!("  https://github.com/junegunn/fzf     # Other systems");
-        println!("");
+        println!();
         println!("Falling back to list view:");
         return handle_list_command(&[]);
     }
@@ -326,7 +324,7 @@ fn handle_browse_command(_args: &[String]) {
                 if !selection.is_empty() {
                     let alias = selection.split('\t').next().unwrap_or(selection.as_str());
 
-                    handle_run_command(&vec![alias.to_string()]);
+                    handle_run_command(&[alias.to_string()]);
                 }
             }
             // User cancelled (Ctrl+C) - just exit silently
