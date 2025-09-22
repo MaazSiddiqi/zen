@@ -4,10 +4,6 @@
 
 </div>
 
-# zen
-
-A simple command launcher and alias manager
-
 ```bash
 # Set up aliases for a React project
 zen add dev "npm run dev"
@@ -23,6 +19,10 @@ zz deploy                # Error: No command registered
 # ↑ + --register
 zz deploy --register "npm run build && aws s3 sync dist/ s3://my-bucket"
 ```
+
+# zen
+
+A simple command launcher and alias manager
 
 ## What is this?
 
