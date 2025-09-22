@@ -3,6 +3,12 @@ name: Update Homebrew Tap
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to update Homebrew formula to'
+        required: true
+        default: 'v0.1.1'
 
 jobs:
   update-tap:
@@ -14,6 +20,6 @@ jobs:
           formula-name: zen
           homebrew-tap: MaazSiddiqi/homebrew-tap
           base-branch: main
-          download-url: https://github.com/MaazSiddiqi/zen/archive/${{ github.ref_name }}.tar.gz
+          download-url: https://github.com/MaazSiddiqi/zen/archive/${{ github.event.inputs.tag || github.ref_name }}.tar.gz
         env:
           COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
