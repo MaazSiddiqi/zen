@@ -187,6 +187,10 @@ These little scripts were honestly such a time saver and took off so much mental
 
 The only issue was I very lazy to have to write these scripts, even if they were only 1 line long. That's why this project was born.
 
+### vs Command Runners (like Just)
+
+zen takes a developer-focused approach compared to project-focused tools like [just](https://github.com/casey/just). While just excels at structured automation within projects using justfiles and recipes, zen prioritizes cross-project workflow consistency with zero setup - no files to edit, no syntax to learn, just `zz dev --register "npm run dev"` when you need it. Both tools solve command management from different angles and can be used together: zen streamlines workflows *across* repos, just streamlines workflows *within* repos.
+
 ## Roadmap
 
 The essence of  zen  is to be simple. I would love to build more robust features that still keep this simple user experience at its core.
