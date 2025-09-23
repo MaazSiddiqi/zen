@@ -5,26 +5,27 @@
 </div>
 
 ```bash
-# Set up aliases for a React project
-zen add dev "npm run dev"
-zen add build "npm run build"
-zen add test "npm test -- --watchAll=false"
+# The problem: Context switching between projects
+~/react-dashboard $ npm run dev         # React project
+~/django-api $ python manage.py runserver  # Django project
+~/rust-cli $ cargo run                  # Rust project
+~/docker-app $ docker-compose up        # Docker project
 
-# Parameter substitution with {}
-zen add deploy "aws s3 sync {} s3://my-bucket"
-zen add copy "cp {} {}"
+# Same developer, different mental overhead every time
 
-# Quick execution
-zz dev                    # Runs: npm run dev
-zz test --verbose        # Runs: npm test -- --watchAll=false --verbose
-zz deploy ./dist         # Runs: aws s3 sync ./dist s3://my-bucket
-zz copy file1.txt backup/  # Runs: cp file1.txt backup/
+# The zen solution: One command everywhere
+~/react-dashboard $ zen add dev "npm run dev"
+~/django-api $ zen add dev "python manage.py runserver"
+~/rust-cli $ zen add dev "cargo run"
+~/docker-app $ zen add dev "docker-compose up"
 
-# Interactive browsing
-zz                       # Opens fzf menu to select and run any alias
+# Now just use muscle memory everywhere:
+~/react-dashboard $ zz dev    # → npm run dev
+~/django-api $ zz dev         # → python manage.py runserver
+~/rust-cli $ zz dev           # → cargo run
+~/docker-app $ zz dev         # → docker-compose up
 
-# In-flow registration (when you forget to set up an alias)
-zz build-prod --register "npm run build --production"
+# Same workflow, different projects
 ```
 
 # zen
