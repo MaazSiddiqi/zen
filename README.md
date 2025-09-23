@@ -193,15 +193,15 @@ zen takes a developer-focused approach compared to project-focused tools like [j
 
 ## Roadmap
 
-The essence of  zen  is to be simple. I would love to build more robust features that still keep this simple user experience at its core.
+The essence of zen is to be simple. I would love to build more robust features that still keep this simple user experience at its core.
 
 If you have any suggestions or features you would like to see, create an issue or submit a PR!
 
-I've thought of a few things I would like to add myself:
+Planned improvements:
 
-- A global zen command registry, storing global aliases. Local aliases override globals
-- `zz` to list currently available commands
-- running servers with zen keeps track of the server process, allowing to kill any outstanding servers you don't want from an fzf view. Tackles the `kill on port` problem
+- **Shell completion** - Tab completion for registered aliases
+- **Alias templates** - Share and import common alias sets across projects
+- **Command history** - Track recent alias executions for better workflow insights
 
 ## Contributing
 
